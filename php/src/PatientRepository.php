@@ -26,7 +26,12 @@ final class PatientRepository
      */
     public function lister(string $tri = 'nom', string $sens = 'asc'): array
     {
-        $sql = "SELECT id, nom, prenom, ville, dateNaissance FROM Patient ORDER BY " . $tri . " " . $sens;
+
+       $COLONNES = array('nom', 'prenom', 'ville', 'dateNaissance');
+        // on vérifie que $tri est dans la liste blanche
+        $col = in_array($tri, $COLONNES, true) ? $tri : 'nom';
+        $sens = strtolower($sens)==="desc" ? 'DESC' : 'ASC'; 
+        $sql = "SELECT id, nom, prenom, ville, dateNaissance FROM Patient ORDER BY $col $sens";
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
 }
